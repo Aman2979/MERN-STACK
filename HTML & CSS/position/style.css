@@ -1,0 +1,41 @@
+*{
+  margin: 0;
+  padding: 0;
+  background-color: #555;
+}
+.box{
+  height: 100px;
+  width: 100px;
+  background-color: chartreuse;
+  margin: 20px;
+  border: 2px solid black;
+  border-radius: 4px;
+  font-size: 40px;
+  font-weight: 700;
+  text-align: center;
+  padding: 5px;
+  box-sizing: border-box;
+  padding-top: 20px;
+}
+
+#box1{
+  position: static;
+}
+
+
+#box2{
+  position: relative;
+  left: 50px;
+  top: 20px;
+}
+
+#box3{
+  position: absolute;
+  left: 20px;
+  top: 30px;
+}
+
+
+#box4{
+  position: fixed;
+}

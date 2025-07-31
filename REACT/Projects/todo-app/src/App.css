@@ -1,0 +1,22 @@
+.appname{
+  margin: 30px;
+  font-size: 40px;
+  font-weight: 700;
+}
+
+.todoContainer{
+  margin: 15px;
+}
+
+.totoText{
+  text-align: left;
+}
+
+.inputBox{
+  font-size: 20px;
+}
+
+.addBtn{
+  margin-left: 15px;
+  
+}
