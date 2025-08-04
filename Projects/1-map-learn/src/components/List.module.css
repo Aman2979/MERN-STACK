@@ -1,0 +1,12 @@
+.aman{
+  background-color: aqua;
+  margin-left: 10px;
+  padding: 10px;
+  border: 2px solid black;
+  border-radius: 4px;
+  width: 60%;
+}
+
+.para{
+  color: darkgreen;
+}
