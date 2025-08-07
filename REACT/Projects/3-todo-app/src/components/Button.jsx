@@ -1,19 +1,19 @@
-const Button = ({btnType, btnText, handler}) => {
+const Button = ({btnType, btnText, addHandler}) => {
   if (btnType === "success") {
     return (
-      <button className="btn btn-success addBtn" onClick={handler}>
+      <button className="btn btn-success addBtn" onClick={addHandler}>
         {btnText}
       </button>
     );
   } else if (btnType === "danger") {
     return (
-      <button className="btn btn-danger" onClick={handler}>
+      <button className="btn btn-danger" onClick={addHandler}>
         {btnText}
       </button>
     );
   } else {
     return (
-      <button className="btn btn-primary" onClick={handler}>
+      <button className="btn btn-primary" onClick={addHandler}>
         {btnText}
       </button>
     );

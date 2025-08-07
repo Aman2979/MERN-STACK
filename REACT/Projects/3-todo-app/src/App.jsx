@@ -2,13 +2,15 @@ import "./App.css";
 import AddTodo from "./components/AddTodo";
 import AppName from "./components/AppName";
 import TodoItems from "./components/TodoItems";
+import UsestateVsUseRfe from "./components/UsestateVsUseRfe";
 
 function App() {
   return (
     <center>
       <AppName />
-      <AddTodo />
-      <TodoItems />
+      <UsestateVsUseRfe />
+      {/* <AddTodo />
+      <TodoItems /> */}
     </center>
   );
 }
