@@ -1,8 +1,7 @@
-const http = require("http");
 const fs = require("fs");
 const { URLSearchParams } = require("url");
 
-const requestHandler = (req, res) => {
+const RequestHandler = (req, res) => {
   console.log("The request recieved: ", req.url, req.method);
   res.setHeader("content-type", "text/html");
 
@@ -34,20 +33,17 @@ const requestHandler = (req, res) => {
 
     req.on("end", () => {
       const body = Buffer.concat(buffer).toString();
-      const urlParams = new URLSearchParams(body)
-      console.log("This is your url Params", urlParams)
-      const bodyJSON = {}
-      for(const [key, value] of urlParams.entries()){
-        bodyJSON[key] = value
+      const urlParams = new URLSearchParams(body);
+      console.log("This is your url Params", urlParams);
+      const bodyJSON = {};
+      for (const [key, value] of urlParams.entries()) {
+        bodyJSON[key] = value;
       }
       fs.writeFileSync("buy.txt", JSON.stringify(bodyJSON));
     });
-
-    
-    fs.writeFileSync("aman.txt", "Aman app");
-
     res.statusCode = 302;
     res.setHeader("Location", "/product");
+    console.log("Response Sending")
   } else if (req.url === "/product") {
     res.write(`
     <!DOCTYPE html>
@@ -55,7 +51,7 @@ const requestHandler = (req, res) => {
       <head>
         <title>Product</title>
       </head>
-      <body>
+      <body style="background: #555;">
         <h1>Welcome to Product list server</h1>
       </body>
       </html>
@@ -77,8 +73,4 @@ const requestHandler = (req, res) => {
   res.end();
 };
 
-const server = http.createServer(requestHandler);
-const PORT = 3000;
-server.listen(PORT, () => {
-  console.log(`Server running at: http://localhost:${PORT}`);
-});
+module.exports = RequestHandler;
