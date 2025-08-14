@@ -32,13 +32,10 @@ app.get("/", (req, res, next) => {
 });
 
 app.post("/buy-products", (req, res, next) => {
-  console.log("Yes, I am inside the buy product");
-  console.log("The Data is:",JSON.stringify(req.body))
   fs.writeFile("buy.json", JSON.stringify(req.body), () => {
       res.statusCode = 302;
       res.setHeader("Location", "/product");
       res.end();
-      console.log("Response Sending");
     });
 });
 
