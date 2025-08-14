@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Add Home</title>
+    <link rel="stylesheet" href="/style/output.css" />
+  </head>
+  <body>
+    <div class="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-blue-100 to-blue-300">
+      <h1 class="text-4xl font-extrabold text-blue-700 mb-8 drop-shadow-lg">Add your home</h1>
+      <form action="/host/add-home" method="POST" class="bg-white rounded-lg shadow-lg p-8 flex flex-col gap-6 w-full max-w-md">
+        <input
+          type="text"
+          name="HouseName"
+          placeholder="Enter your House Name"
+          class="px-4 py-3 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-lg"
+        />
+        <input
+          type="submit"
+          value="ADD HOME"
+          class="bg-blue-500 mt-2 text-white font-semibold text-lg py-3 rounded-lg shadow-md hover:bg-blue-600 transition-colors duration-200 cursor-pointer"
+        />
+      </form>
+    </div>
+  </body>
+</html>
