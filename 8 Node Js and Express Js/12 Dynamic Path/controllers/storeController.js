@@ -14,32 +14,46 @@ exports.getHomes = (req, res, next) => {
 };
 
 exports.getFavourites = (req, res, next) => {
-  Favourites.fetchAll(favouritesIds =>{
+  Favourites.fetchAll((favouritesIds) => {
     Home.fetchAll((registeredHomes) => {
-      const favouriteHomes = registeredHomes.filter(home => favouritesIds.includes(home.id))
-    res.render("store/favourites", { homes: favouriteHomes, pageTitle: "Favourites" });
+      const favouriteHomes = registeredHomes.filter((home) =>
+        favouritesIds.includes(home.id)
+      );
+      res.render("store/favourites", {
+        homes: favouriteHomes,
+        pageTitle: "Favourites",
+      });
+    });
   });
-  })
 };
 
 exports.postAddFavourites = (req, res, next) => {
-  const homeId = req.body.id
-  Favourites.addTofavourites(homeId, error =>{
+  const homeId = req.body.id;
+  Favourites.addTofavourites(homeId, (error) => {
     if (error) {
-      console.log("Error while adding to favourites", error)
+      console.log("Error while adding to favourites", error);
     }
-    res.redirect("/favourites")
-  })
+    res.redirect("/favourites");
+  });
 };
 
+exports.postRemoveFavourite = (req, res, next) => {
+  const homeId = req.params.homeId;
+  Favourites.deletById(homeId, (error) => {
+    if (error) {
+      console.log("Error while remove from favourites", error);
+    }
+    res.redirect("/favourites");
+  });
+};
 
 exports.getHomeDetails = (req, res, next) => {
   const homeId = req.params.homeIdentity;
-  Home.findById(homeId, home => {
+  Home.findById(homeId, (home) => {
     if (!home) {
-      console.log("home to found")
-      return res.redirect("/homes")
+      console.log("home to found");
+      return res.redirect("/homes");
     }
     res.render("store/home-detail", { home: home, pageTitle: "Home Detail" });
-  })
-}
+  });
+};
