@@ -8,14 +8,14 @@ exports.getIndex = (req, res, next) => {
 };
 
 exports.getHomes = (req, res, next) => {
-  Home.fetchAll((registeredHomes) => {
+  Home.fetchAll().then(([registeredHomes]) => {
     res.render("store/homes", { homes: registeredHomes, pageTitle: "Home" });
   });
 };
 
 exports.getFavourites = (req, res, next) => {
   Favourites.fetchAll((favouritesIds) => {
-    Home.fetchAll((registeredHomes) => {
+    Home.fetchAll().then(([registeredHomes]) => {
       const favouriteHomes = registeredHomes.filter((home) =>
         favouritesIds.includes(home.id)
       );

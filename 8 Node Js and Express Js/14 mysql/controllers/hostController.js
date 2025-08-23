@@ -27,8 +27,8 @@ exports.getEditHome = (req, res, next) => {
 };
 
 exports.postAddHome = (req, res, next) => {
-  const { houseName, price, location, rating, photoUrl } = req.body;
-  const newHouse = new Home(houseName, price, location, rating, photoUrl);
+  const { houseName, price, location, rating, photoUrl, description } = req.body;
+  const newHouse = new Home(houseName, price, location, rating, photoUrl, description);
   newHouse.save((err) => {
     if (err) {
       res.redirect("/");
@@ -39,8 +39,8 @@ exports.postAddHome = (req, res, next) => {
 };
 
 exports.postEditHome = (req, res, next) =>{
-  const {id, houseName, price, location, rating, photoUrl } = req.body;
-  const newHouse = new Home(houseName, price, location, rating, photoUrl);
+  const {id, houseName, price, location, rating, photoUrl, description } = req.body;
+  const newHouse = new Home(houseName, price, location, rating, photoUrl, description);
   newHouse.id = id
   newHouse.save((err) => {
     if (err) {
@@ -63,7 +63,7 @@ exports.postDeleteHome = (req, res, next) =>{
 }
 
 exports.getHostHomes = (req, res, next) => {
-  Home.fetchAll((registeredHomes) => {
+  Home.fetchAll().then(([registeredHomes]) => {
     res.render("host/host-homes", {
       homes: registeredHomes,
       pageTitle: "Host Home",
