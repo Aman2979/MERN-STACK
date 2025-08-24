@@ -11,15 +11,24 @@ module.exports = class Home {
     this.description = description;
   }
 
-  save(callback) {
-    
+  save() {
+    // return airbnbDb.execute(`INSERT INTO homes (houseName, price, location, rating, photoUrl, description) VALUES ('${this.houseName}', ${this.price}, '${this.location}', ${this.rating}, '${this.photoUrl}',  '${this.description}')`)
+
+    return airbnbDb.execute(
+      `INSERT INTO homes (houseName, price, location, rating, photoUrl, description) VALUES (?, ?, ?, ?, ?, ?)`,
+      [this.houseName, this.price, this.location, this.rating, this.photoUrl, this.description]
+    );
   }
 
   static fetchAll() {
     return airbnbDb.execute("SELECT * FROM homes")
   }
 
-  static findById(homeId, callback) {}
+  static findById(homeId) {
+    return airbnbDb.execute("SELECT * FROM homes WHERE id = ?", [homeId]);
+  }
 
-  static deletById(homeId, callback) {}
+  static deletById(homeId, callback) {
+    return airbnbDb.execute("DELETE FROM homes WHERE id=?", [homeId])
+  }
 };

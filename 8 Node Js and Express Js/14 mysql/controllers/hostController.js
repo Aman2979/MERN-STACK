@@ -12,7 +12,8 @@ exports.getEditHome = (req, res, next) => {
     return res.redirect("/host/host-homes");
   }
 
-  Home.findById(homeId, (home) => {
+  Home.findById(homeId).then(([homes]) => {
+    const home = homes[0]
     if (!home) {
       console.log("Home not found for editing");
       return res.redirect("/host/host-homes");
@@ -29,12 +30,8 @@ exports.getEditHome = (req, res, next) => {
 exports.postAddHome = (req, res, next) => {
   const { houseName, price, location, rating, photoUrl, description } = req.body;
   const newHouse = new Home(houseName, price, location, rating, photoUrl, description);
-  newHouse.save((err) => {
-    if (err) {
-      res.redirect("/");
-    } else {
-      res.render("host/home-added", { pageTitle: "Home Hosted" });
-    }
+  newHouse.save().then(([rows]) =>{
+    res.render("host/home-added", {pageTitle: "Home Hosted"})
   });
 };
 
@@ -54,10 +51,7 @@ exports.postEditHome = (req, res, next) =>{
 exports.postDeleteHome = (req, res, next) =>{
   const homeId = req.params.homeId
   console.log("Came to delete ", homeId)
-  Home.deletById(homeId, error =>{
-    if(error){
-      console.log("Error on deleting time", error)
-    }
+  Home.deletById(homeId).then(() =>{
     res.redirect("/host/host-homes")
   })
 }
