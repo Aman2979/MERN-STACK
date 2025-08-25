@@ -7,11 +7,11 @@ const url =
 
 let _db;
 
-const mongoConnect = (callBack) => {
+const mongoConnect = (callback) => {
   MongoClient.connect(url)
     .then((client) => {
       _db = client.db("airbnb");
-      callBack();
+      callback();
     })
     .catch((error) => {
       console.log("Error came while connecting to mongoDB", error);

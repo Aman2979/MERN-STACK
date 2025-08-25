@@ -1,6 +1,5 @@
 const Favourites = require("./Favourites");
-const airbnbDb = require("../util/database-util");
-const { get } = require("../routers/storeRouter");
+const airbnb = require("../util/database-util");
 
 module.exports = class Home {
   constructor(houseName, price, location, rating, photoUrl, description) {
@@ -25,7 +24,7 @@ module.exports = class Home {
   static findById(homeId) {
   }
 
-  static deletById(homeId, callback) {
+  static deleteById(homeId, callback) {
 
   }
 };

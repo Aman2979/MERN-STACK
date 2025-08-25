@@ -1,10 +1,10 @@
 const Favourites = require("../models/Favourites");
-const Home = require("./../models/Home");
+const Home = require("../models/Home");
 
 exports.getIndex = (req, res, next) => {
   Home.fetchAll().then(([registeredHomes]) => {
     res.render("store/index", { homes: registeredHomes, pageTitle: "Home" });
-  });  
+  });
 };
 
 exports.getHomes = (req, res, next) => {
@@ -29,7 +29,7 @@ exports.getFavourites = (req, res, next) => {
 
 exports.postAddFavourites = (req, res, next) => {
   const homeId = req.body.id;
-  Favourites.addTofavourites(homeId, (error) => {
+  Favourites.addToFavourites(homeId, (error) => {
     if (error) {
       console.log("Error while adding to favourites", error);
     }
@@ -39,22 +39,23 @@ exports.postAddFavourites = (req, res, next) => {
 
 exports.postRemoveFavourite = (req, res, next) => {
   const homeId = req.params.homeId;
-  Favourites.deletById(homeId, (error) => {
+  Favourites.deleteById(homeId, (error) => {
     if (error) {
-      console.log("Error while remove from favourites", error);
+      console.log("Error while removing from favourites", error);
     }
     res.redirect("/favourites");
   });
 };
 
 exports.getHomeDetails = (req, res, next) => {
-  const homeId = req.params.homeIdentity;
-  Home.findById(homeId).then(([homes]) =>{
+  const homeId = req.params.homeId;
+  Home.findById(homeId).then(([homes]) => {
     const home = homes[0];
-      if (!home) {
-        console.log("home to found");
-        return res.redirect("/homes");
-      }
-      res.render("store/home-detail", { home: home, pageTitle: "Home Detail" });
+    if (!home) {
+      console.log("home not found");
+      return res.redirect("/homes");
+    }
+    res.render("store/home-detail", { home: home, pageTitle: "Home Detail" });
   });
 };
+
