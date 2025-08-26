@@ -1,5 +1,5 @@
 const Favourites = require("./Favourites");
-const airbnb = require("../util/database-util");
+const airbnbDb = require("../util/database-util");
 
 module.exports = class Home {
   constructor(houseName, price, location, rating, photoUrl, description) {
@@ -12,19 +12,23 @@ module.exports = class Home {
   }
 
   save() {
-    const db = getDb();
-    return db.collection("homes").insertOne(this).then(result => {
-      console.log(result);
-    });
+    // return airbnbDb.execute(`INSERT INTO homes (houseName, price, location, rating, photoUrl, description) VALUES ('${this.houseName}', ${this.price}, '${this.location}', ${this.rating}, '${this.photoUrl}',  '${this.description}')`)
+
+    return airbnbDb.execute(
+      `INSERT INTO homes (houseName, price, location, rating, photoUrl, description) VALUES (?, ?, ?, ?, ?, ?)`,
+      [this.houseName, this.price, this.location, this.rating, this.photoUrl, this.description]
+    );
   }
 
   static fetchAll() {
+    return airbnbDb.execute("SELECT * FROM homes")
   }
 
   static findById(homeId) {
+    return airbnbDb.execute("SELECT * FROM homes WHERE id = ?", [homeId]);
   }
 
-  static deleteById(homeId, callback) {
-
+  static deletById(homeId, callback) {
+    return airbnbDb.execute("DELETE FROM homes WHERE id=?", [homeId])
   }
 };
