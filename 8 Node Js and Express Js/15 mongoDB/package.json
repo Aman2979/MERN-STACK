@@ -5,9 +5,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "tailwind": "npx tailwindcss -i ./public/styles/input.css -o ./public/styles/output.css --watch",
-    "build:css": "npx tailwindcss -i ./public/styles/input.css -o ./public/styles/output.css",
-    "dev": "concurrently \"npm run tailwind\" \"nodemon app.js\"",
-    "start": "node app.js"
+    "start": "concurrently \"npm run tailwind\" \"nodemon app.js\""
   },
   "author": "",
   "license": "ISC",
@@ -21,7 +19,6 @@
     "body-parser": "^1.20.3",
     "ejs": "^3.1.10",
     "express": "^4.21.1",
-    "mongodb": "^6.18.0",
     "mysql2": "^3.14.3"
   }
 }

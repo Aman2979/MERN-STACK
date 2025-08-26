@@ -1,29 +1,10 @@
-const mongodb = require("mongodb");
+const mysql = require("mysql2");
 
-const MongoClient = mongodb.MongoClient;
+const pool = mysql.createPool({
+  host: "localhost",
+  user: "root",
+  password: "Aman@2979",
+  database: "airbnb",
+});
 
-const url =
-  "mongodb+srv://techAman0001:Aman%402979@firstcluster.40bxuki.mongodb.net/?retryWrites=true&w=majority&appName=firstCluster";
-
-let _db;
-
-const mongoConnect = (callback) => {
-  MongoClient.connect(url)
-    .then((client) => {
-      _db = client.db("airbnb");
-      callback();
-    })
-    .catch((error) => {
-      console.log("Error came while connecting to mongoDB", error);
-    });
-};
-
-const getDb = () => {
-  if (!_db) {
-    throw new Error("Could not connect to Db");
-  }
-  return _db;
-};
-
-exports.mongoConnect = mongoConnect;
-exports.getDb = getDb;
+module.exports = pool.promise();
