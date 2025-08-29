@@ -30,7 +30,7 @@ exports.getEditHome = (req, res, next) => {
 exports.postAddHome = (req, res, next) => {
   const { houseName, price, location, rating, photoUrl, description } = req.body;
   const newHouse = new Home(houseName, price, location, rating, photoUrl, description);
-  newHouse.save().then(([rows]) =>{
+  newHouse.save().then((rows) =>{
     res.render("host/home-added", {pageTitle: "Home Hosted"})
   });
 };
