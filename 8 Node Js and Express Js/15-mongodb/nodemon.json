@@ -1,5 +1,6 @@
 {
-  "watch": ["*.js"],
+  "watch": ".",
   "ext": "js,json",
+  "ignore": ["data/"],
   "exec": "node app.js"
 }

@@ -1,3 +1,4 @@
+const { ObjectId } = require("mongodb");
 const { getDb } = require("../util/database-util");
 
 module.exports = class Home {
@@ -12,13 +13,12 @@ module.exports = class Home {
 
   save() {
     const db = getDb()
-    return db.collection("homes").insertOne(this).then(result =>{
-      console.log(result)
-    })
+    return db.collection("homes").insertOne(this)
   }
 
   static fetchAll() {
-
+    const db = getDb()
+    return db.collection('homes').find().toArray()
   }
 
   static findById(homeId) {

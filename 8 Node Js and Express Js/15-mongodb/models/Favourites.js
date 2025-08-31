@@ -10,11 +10,7 @@ module.exports = class Favourites {
       if (err) {
         callback([]);
       } else {
-        callback(JSON.parse(data));
-
-
-
-        
+        callback(JSON.parse(data))
       }
     });
   }
