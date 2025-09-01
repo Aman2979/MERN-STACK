@@ -32,12 +32,12 @@
                 <div class="flex items-center justify-between mt-6 gap-2">
                   <span class="text-3xl font-extrabold text-blue-600 drop-shadow-sm">₹<%= home.price %></span>
                   <a 
-                    href="/host/edit-home/<%= home.id %>?editing=true"
+                    href="/host/edit-home/<%= home._id %>?editing=true"
                     class="bg-gradient-to-r from-yellow-400 to-yellow-600 text-white px-5 py-2 rounded-xl font-semibold shadow-md hover:from-yellow-500 hover:to-yellow-700 hover:scale-105 transition-all duration-200"
                   >
                     Edit
                   </a>
-                  <form action="/host/delete-home/<%= home.id %>" method="POST" class="inline-block ml-2">
+                  <form action="/host/delete-home/<%= home._id %>" method="POST" class="inline-block ml-2">
                     <button class="bg-gradient-to-r from-red-500 to-pink-500 text-white px-5 py-2 rounded-xl font-semibold shadow-md hover:from-red-600 hover:to-pink-600 hover:scale-105 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-red-300">
                       Delete
                     </button>

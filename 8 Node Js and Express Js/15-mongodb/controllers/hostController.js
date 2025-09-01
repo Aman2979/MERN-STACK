@@ -1,7 +1,7 @@
 const Home = require("./../models/Home");
 
 exports.getAddHome = (req, res, next) => {
-  res.render("host/edit-home", {editing:false, pageTitle: "Host Your Home" });
+  res.render("host/edit-home", { editing: false, pageTitle: "Host Your Home" });
 };
 
 exports.getEditHome = (req, res, next) => {
@@ -12,8 +12,7 @@ exports.getEditHome = (req, res, next) => {
     return res.redirect("/host/host-homes");
   }
 
-  Home.findById(homeId).then(([homes]) => {
-    const home = homes[0]
+  Home.findById(homeId).then((home) => {
     if (!home) {
       console.log("Home not found for editing");
       return res.redirect("/host/host-homes");
@@ -28,36 +27,51 @@ exports.getEditHome = (req, res, next) => {
 };
 
 exports.postAddHome = (req, res, next) => {
-  const { houseName, price, location, rating, photoUrl, description } = req.body;
-  const newHouse = new Home(houseName, price, location, rating, photoUrl, description);
-  newHouse.save().then((rows) =>{
-    res.redirect("/host/host-homes")
+  const { houseName, price, location, rating, photoUrl, description } =
+    req.body;
+  const newHouse = new Home(
+    houseName,
+    price,
+    location,
+    rating,
+    photoUrl,
+    description
+  );
+  newHouse.save().then((rows) => {
+    res.redirect("/host/host-homes");
   });
 };
 
-exports.postEditHome = (req, res, next) =>{
-  const {id, houseName, price, location, rating, photoUrl, description } = req.body;
-  const newHouse = new Home(houseName, price, location, rating, photoUrl, description);
-  newHouse.id = id
-  newHouse.save((err) => {
+exports.postEditHome = (req, res, next) => {
+  const { id, houseName, price, location, rating, photoUrl, description } =
+    req.body;
+  const newHome = new Home(
+    houseName,
+    price,
+    location,
+    rating,
+    photoUrl,
+    description,
+    id
+  );
+  newHome.save().then((err) => {
     if (err) {
-      console.log("Error while updating home", err)
-    } else {
-     res.redirect("/host/host-homes");
+      console.log("Error while updating home", err);
     }
+    res.redirect("/host/host-homes");
   });
-}
+};
 
-exports.postDeleteHome = (req, res, next) =>{
-  const homeId = req.params.homeId
-  console.log("Came to delete ", homeId)
-  Home.deletById(homeId).then(() =>{
-    res.redirect("/host/host-homes")
-  })
-}
+exports.postDeleteHome = (req, res, next) => {
+  const homeId = req.params.homeId;
+  console.log("Came to delete ", homeId);
+  Home.deletById(homeId).then(() => {
+    res.redirect("/host/host-homes");
+  });
+};
 
 exports.getHostHomes = (req, res, next) => {
-  Home.fetchAll().then(registeredHomes => {
+  Home.fetchAll().then((registeredHomes) => {
     res.render("host/host-homes", {
       homes: registeredHomes,
       pageTitle: "Host Home",

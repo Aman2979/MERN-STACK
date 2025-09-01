@@ -31,7 +31,7 @@
                   <span class="text-3xl font-extrabold text-blue-600 drop-shadow-sm">₹<%= home.price %></span>
                   <%- include('../partials/add-to-favourite', {home: home}) %>
                   <a 
-                    href="/homes/<%= home.id %>"
+                    href="/homes/<%= home._id %>"
                     class="bg-gradient-to-r from-blue-500 to-blue-700 text-white px-5 py-2 rounded-xl font-semibold shadow-md hover:from-blue-600 hover:to-blue-800 hover:scale-105 transition-all duration-200"
                   >
                     Details

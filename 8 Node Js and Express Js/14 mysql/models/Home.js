@@ -12,16 +12,39 @@ module.exports = class Home {
   }
 
   save() {
-    // return airbnbDb.execute(`INSERT INTO homes (houseName, price, location, rating, photoUrl, description) VALUES ('${this.houseName}', ${this.price}, '${this.location}', ${this.rating}, '${this.photoUrl}',  '${this.description}')`)
-
-    return airbnbDb.execute(
-      `INSERT INTO homes (houseName, price, location, rating, photoUrl, description) VALUES (?, ?, ?, ?, ?, ?)`,
-      [this.houseName, this.price, this.location, this.rating, this.photoUrl, this.description]
-    );
+    if (this.id) {
+      //Update
+      return airbnbDb.execute(
+        "UPDATE homes SET houseName=?, price=?, location=?, rating=?, photoUrl=?, description=? WHERE id=?",
+        [
+          this.houseName,
+          this.price,
+          this.location,
+          this.rating,
+          this.photoUrl,
+          this.description,
+          this.id,
+        ]
+      );
+    } else {
+      // Insert
+      // return airbnbDb.execute(`INSERT INTO homes (houseName, price, location, rating, photoUrl, description) VALUES ('${this.houseName}', ${this.price}, '${this.location}', ${this.rating}, '${this.photoUrl}',  '${this.description}')`)
+      return airbnbDb.execute(
+        "INSERT INTO homes (houseName, price, location, rating, photoUrl, description) VALUES (?, ?, ?, ?, ?, ?)",
+        [
+          this.houseName,
+          this.price,
+          this.location,
+          this.rating,
+          this.photoUrl,
+          this.description,
+        ]
+      );
+    }
   }
 
   static fetchAll() {
-    return airbnbDb.execute("SELECT * FROM homes")
+    return airbnbDb.execute("SELECT * FROM homes");
   }
 
   static findById(homeId) {
@@ -29,6 +52,6 @@ module.exports = class Home {
   }
 
   static deletById(homeId, callback) {
-    return airbnbDb.execute("DELETE FROM homes WHERE id=?", [homeId])
+    return airbnbDb.execute("DELETE FROM homes WHERE id=?", [homeId]);
   }
 };

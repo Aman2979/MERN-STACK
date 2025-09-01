@@ -2,22 +2,23 @@ const Favourites = require("../models/Favourites");
 const Home = require("./../models/Home");
 
 exports.getIndex = (req, res, next) => {
-  Home.fetchAll().then(registeredHomes => {
+  Home.fetchAll().then((registeredHomes) => {
     res.render("store/index", { homes: registeredHomes, pageTitle: "Home" });
-  });  
+  });
 };
 
 exports.getHomes = (req, res, next) => {
-  Home.fetchAll().then(registeredHomes => {
+  Home.fetchAll().then((registeredHomes) => {
     res.render("store/homes", { homes: registeredHomes, pageTitle: "Home" });
   });
 };
 
 exports.getFavourites = (req, res, next) => {
-  Favourites.fetchAll((favouritesIds) => {
-    Home.fetchAll().then(registeredHomes => {
+  Favourites.fetchAll().then((favouritesIds) => {
+    Home.fetchAll().then((registeredHomes) => {
+      console.log('This is your ids',favouritesIds, registeredHomes);
       const favouriteHomes = registeredHomes.filter((home) =>
-        favouritesIds.includes(home.id)
+        favouritesIds.includes(home._id)
       );
       res.render("store/favourites", {
         homes: favouriteHomes,
@@ -29,12 +30,16 @@ exports.getFavourites = (req, res, next) => {
 
 exports.postAddFavourites = (req, res, next) => {
   const homeId = req.body.id;
-  Favourites.addTofavourites(homeId, (error) => {
-    if (error) {
-      console.log("Error while adding to favourites", error);
-    }
-    res.redirect("/favourites");
-  });
+  const fav = new Favourites(homeId);
+  fav
+    .save()
+    .then(() => {
+      res.redirect("/favourites");
+    })
+    .catch((err) => {
+      console.log("Error while adding to favourites", err);
+      res.redirect("/favourites");
+    });
 };
 
 exports.postRemoveFavourite = (req, res, next) => {
@@ -49,12 +54,11 @@ exports.postRemoveFavourite = (req, res, next) => {
 
 exports.getHomeDetails = (req, res, next) => {
   const homeId = req.params.homeIdentity;
-  Home.findById(homeId).then(([homes]) =>{
-    const home = homes[0];
-      if (!home) {
-        console.log("home to found");
-        return res.redirect("/homes");
-      }
-      res.render("store/home-detail", { home: home, pageTitle: "Home Detail" });
+  Home.findById(homeId).then((home) => {
+    if (!home) {
+      console.log("home to found");
+      return res.redirect("/homes");
+    }
+    res.render("store/home-detail", { home: home, pageTitle: "Home Detail" });
   });
 };

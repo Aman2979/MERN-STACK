@@ -3,7 +3,6 @@ const fs = require("fs");
 const { URLSearchParams } = require("url");
 
 const requestHandler = (req, res) => {
-  console.log("The request recieved: ", req.url, req.method);
   res.setHeader("content-type", "text/html");
 
   if (req.url === "/") {
