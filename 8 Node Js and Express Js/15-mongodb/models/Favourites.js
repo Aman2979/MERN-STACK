@@ -7,8 +7,17 @@ module.exports = class Favourites {
   }
 
   save() {
-    const db = getDb;
-    return db.collection("favourites").insertOne(this);
+    const db = getDb();
+    return db
+      .collection("favourites")
+      .findOne({ homeId: this.homeId })
+      .then((existingFav) => {
+        if (!existingFav) {
+          return db.collection("favourites").insertOne(this);
+        }
+
+        return Promise.resolve();
+      });
   }
 
   static fetchAll() {
@@ -18,8 +27,6 @@ module.exports = class Favourites {
 
   static deletById(homeId) {
     const db = getDb();
-    return db
-      .collection("favourites")
-      .deleteOne({ homeId: new ObjectId(String(homeId)) });
+    return db.collection("favourites").deleteOne({ homeId });
   }
 };
