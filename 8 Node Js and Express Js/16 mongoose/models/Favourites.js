@@ -9,4 +9,6 @@ const favouriteSchema = new mongoose.Schema({
   },
 });
 
+// favouriteSchema.pre()
+
 module.exports = mongoose.model("Favourite", favouriteSchema);
