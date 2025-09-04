@@ -14,10 +14,11 @@ exports.getHomes = (req, res, next) => {
 };
 
 exports.getFavourites = (req, res, next) => {
-  Favourites.fetchAll().then((favouritesIds) => {
+  Favourites.find().then((favouritesIds) => {
     Home.find().then((registeredHomes) => {
-      favouritesIds = favouritesIds.map((favId) => favId.homeId);
-      console.log("This is your ids", favouritesIds, registeredHomes);
+      favouritesIds = favouritesIds.map((favId) => favId.homeId.toString());
+      console.log(favouritesIds, registeredHomes);
+
       const favouriteHomes = registeredHomes.filter((home) =>
         favouritesIds.includes(home._id.toString())
       );
