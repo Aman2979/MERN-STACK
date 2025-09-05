@@ -85,7 +85,7 @@ app.use((req, res, next) =>{
 })
 
 // const server = http.createServer(app);
-const PORT = 3001;
+const PORT = 3002;
 app.listen(PORT, () => {
   console.log(`Server running at: http://localhost:${PORT}`);
 });
