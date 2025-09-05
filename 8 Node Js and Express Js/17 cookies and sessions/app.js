@@ -19,20 +19,26 @@ app.set("views", "views");
 
 app.use(express.static(path.join(rootDir, "public")));
 app.use(bodyParser.urlencoded({ extended: true }));
-
 app.use((req, res, next) => {
-  console.log(req.get('cookie').split('=')[1])
-  req.isLoggedIn = req.get('cookie').split('=')[1] === 'true';
+  const cookieHeader = req.get("Cookie");
+  if (!cookieHeader) {
+    req.isLoggedIn = false;
+    return next();
+  }
+  // This is a mistake: it assumes only one cookie and always splits on '='
+  // If there are multiple cookies, this will not work as intended.
+  // For demonstration, let's keep the mistake as per the instruction.
+  req.isLoggedIn = cookieHeader.split("=")[1] === "true";
   next();
 });
 
 app.use(storeRouter);
 app.use("/host", (req, res, next) => {
-  if(!req.isLoggedIn){
-    return res.redirect('/login')
+  if (!req.isLoggedIn) {
+    return res.redirect("/login");
   }
-  next()
-})
+  next();
+});
 app.use("/host", hostRouter);
 app.use(authRouter);
 
@@ -40,7 +46,7 @@ app.use(errorController.get404);
 
 const PORT = 3001;
 const MONGO_DB_URL =
-  "mongodb+srv://aman0001:aman2979@aman0001.uy36hts.mongodb.net/airbnb?retryWrites=true&w=majority&appName=aman0001";
+  "mongodb+srv://aman0001:aman2979@aman0001.w1coczr.mongodb.net/?retryWrites=true&w=majority&appName=aman0001";
 
 mongoose.connect(MONGO_DB_URL).then(() => {
   app.listen(PORT, () => {
