@@ -1,13 +1,15 @@
+const { request } = require("express");
+
 exports.getLogin = (req, res, next) => {
   res.render("auth/login", { pageTitle: "login", isLoggedIn: false });
 };
 
 exports.postLogin = (req, res, next) => {
-  res.cookie("isLoggedIn", true); // 'cookie' should be lowercase, not 'Cookie'
+  req.session.isLoggedIn = true;
   res.redirect("/");
 };
 
 exports.postLogout = (req, res, next) => {
-  res.cookie("isLoggedIn", false); // 'cookie' should be lowercase, not 'Cookie'
+  req.session.destroy();
   res.redirect("/login");
 };
