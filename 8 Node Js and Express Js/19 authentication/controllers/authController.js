@@ -14,7 +14,7 @@ exports.postLogin = (req, res, next) => {
 };
 
 exports.postSignup = (req, res, next) => {
-  console.log("user came to signup", req.body);
+  console.log("user came to signup ", req.body);
   res.redirect("/login");
 };
 
