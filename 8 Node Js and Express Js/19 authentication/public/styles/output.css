@@ -1641,14 +1641,14 @@ video {
   --tw-gradient-to: #a16207 var(--tw-gradient-to-position);
 }
 
-.hover\:text-yellow-200:hover {
-  --tw-text-opacity: 1;
-  color: rgb(254 240 138 / var(--tw-text-opacity, 1));
-}
-
 .hover\:text-blue-800:hover {
   --tw-text-opacity: 1;
   color: rgb(30 64 175 / var(--tw-text-opacity, 1));
+}
+
+.hover\:text-yellow-200:hover {
+  --tw-text-opacity: 1;
+  color: rgb(254 240 138 / var(--tw-text-opacity, 1));
 }
 
 .hover\:shadow-\[0_12px_48px_0_rgba\(30\2c 64\2c 175\2c 0\.18\)\]:hover {
