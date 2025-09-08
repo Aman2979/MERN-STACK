@@ -9,16 +9,8 @@
     <div class="flex justify-center w-full">
       <form action="/signup" method="POST" class="w-full max-w-md bg-white/95 rounded-2xl shadow-2xl p-8 border border-blue-200 flex flex-col gap-6">
 
-        <% if (typeof errorMessages !== 'undefined' && errorMessages && errorMessages.length > 0) { %>
-          <div class="mb-4 p-4 rounded-xl bg-red-100 border border-red-300 shadow text-red-700">
-            <ul class="list-disc list-inside space-y-1 pl-4">
-              <% errorMessages.forEach(errorMessage => { %>
-                <li class="font-medium"><%= errorMessage %></li>
-              <% }) %>
-            </ul>
-          </div>
-        <% } %>
-        
+        <%- include('../partials/error-messages') %>
+
         <div class="flex flex-col gap-4">
           <input 
             id="firstName"

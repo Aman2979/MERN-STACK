@@ -8,10 +8,9 @@
     </h1>
     <div class="flex justify-center w-full">
       <form action="/login" method="POST" class="w-full max-w-md bg-white/95 rounded-2xl shadow-2xl p-8 border border-blue-200 flex flex-col gap-6">
+
         <div>
-          <label class="block text-lg font-semibold text-blue-700 mb-2" for="username">
-            Email
-          </label>
+          <%- include('../partials/error-messages') %>
           <input 
             id="email"
             type="email" 
@@ -21,9 +20,6 @@
           />
         </div>
         <div>
-          <label class="block text-lg font-semibold text-blue-700 mb-2" for="password">
-            Password
-          </label>
           <input 
             id="password"
             type="password" 

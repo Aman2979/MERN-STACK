@@ -3,6 +3,8 @@ const { check, validationResult } = require("express-validator");
 const { request } = require("express");
 const User = require("../models/User");
 
+const bcrypt = require("bcryptjs");
+
 exports.getLogin = (req, res, next) => {
   res.render("auth/login", { pageTitle: "login", isLoggedIn: false });
 };
@@ -11,9 +13,30 @@ exports.getSignup = (req, res, next) => {
   res.render("auth/signup", { pageTitle: "login", isLoggedIn: false });
 };
 
-exports.postLogin = (req, res, next) => {
-  req.session.isLoggedIn = true;
-  res.redirect("/");
+exports.postLogin = async (req, res, next) => {
+  const { password, email } = req.body;
+  console.log(password, email);
+  try {
+    const user = await User.findOne({ email });
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      throw new Error("Password does not match");
+    }
+    req.session.isLoggedIn = true;
+    req.session.user = user;
+    await req.session.save();
+    res.redirect("/");
+  } catch (err) {
+    res.render("auth/login", {
+      pageTitle: "login",
+      isLoggedIn: false,
+      errorMessages: [err.message],
+    });
+  }
 };
 
 exports.postSignup = [
@@ -88,22 +111,31 @@ exports.postSignup = [
     }
 
     const { firstName, lastName, email, password, userType } = req.body;
-    const user = new User({ firstName, lastName, email, password, userType });
 
-    user
-      .save()
-      .then((result) => {
-        console.log(result);
-        res.redirect("/login");
-      })
-      .catch((error) => {
-        return res.status(422).render("auth/signup", {
-          pageTitle: "SignUp",
-          isLoggedIn: false,
-          errorMessages: [error],
-          oldInput: req.body,
-        });
+    bcrypt.hash(password, 12).then((hashPassword) => {
+      const user = new User({
+        firstName,
+        lastName,
+        email,
+        password: hashPassword,
+        userType,
       });
+
+      user
+        .save()
+        .then((result) => {
+          console.log(result);
+          res.redirect("/login");
+        })
+        .catch((error) => {
+          return res.status(422).render("auth/signup", {
+            pageTitle: "SignUp",
+            isLoggedIn: false,
+            errorMessages: [error],
+            oldInput: req.body,
+          });
+        });
+    });
   },
 ];
 

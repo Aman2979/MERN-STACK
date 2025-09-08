@@ -5,6 +5,7 @@ exports.getAddHome = (req, res, next) => {
     editing: false,
     pageTitle: "Host Your Home",
     isLoggedIn: req.session.isLoggedIn,
+    user: req.session.user,
   });
 };
 
@@ -27,6 +28,7 @@ exports.getEditHome = (req, res, next) => {
       editing: editing,
       pageTitle: "Edit Your Home",
       isLoggedIn: req.session.isLoggedIn,
+      user: req.session.user,
     });
   });
 };
@@ -34,15 +36,6 @@ exports.getEditHome = (req, res, next) => {
 exports.postAddHome = (req, res, next) => {
   const { houseName, price, location, rating, photoUrl, description } =
     req.body;
-  console.log(
-    "First body",
-    houseName,
-    price,
-    location,
-    rating,
-    photoUrl,
-    description
-  );
   const newHouse = new Home({
     houseName,
     price,
@@ -50,6 +43,7 @@ exports.postAddHome = (req, res, next) => {
     rating,
     photoUrl,
     description,
+    host: req.session.user._id,
   });
   newHouse.save().then(() => {
     res.redirect("/host/host-homes");
@@ -87,11 +81,12 @@ exports.postDeleteHome = (req, res, next) => {
 };
 
 exports.getHostHomes = (req, res, next) => {
-  Home.find().then((registeredHomes) => {
+  Home.find({host: req.session.user._id}).then((registeredHomes) => {
     res.render("host/host-homes", {
       homes: registeredHomes,
       pageTitle: "Host Home",
       isLoggedIn: req.session.isLoggedIn,
+      user: req.session.user,
     });
   });
 };
