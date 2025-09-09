@@ -1,0 +1,9 @@
+<% if (typeof errorMessages !== 'undefined' && errorMessages && errorMessages.length > 0) { %>
+          <div class="mb-4 p-4 rounded-xl bg-red-100 border border-red-300 shadow text-red-700">
+            <ul class="list-disc list-inside space-y-1 pl-4">
+              <% errorMessages.forEach(errorMessage => { %>
+                <li class="font-medium"><%= errorMessage %></li>
+              <% }) %>
+            </ul>
+          </div>
+        <% } %>
