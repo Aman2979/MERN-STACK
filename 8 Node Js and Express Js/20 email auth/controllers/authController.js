@@ -4,12 +4,35 @@ const bcrypt = require("bcryptjs");
 
 const sendGrid = require("@sendgrid/mail");
 const SEND_GRID_KEY =
-  " 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";
+  "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";
 
 sendGrid.setApiKey(SEND_GRID_KEY);
 
 exports.getLogin = (req, res, next) => {
   res.render("auth/login", { pageTitle: "login", isLoggedIn: false });
+};
+
+exports.getForgotPassword = (req, res, next) => {
+  res.render("auth/forgot", {
+    pageTitle: "Forgot password",
+    isLoggedIn: false,
+  });
+};
+
+exports.postForgotPassword = async (req, res, next) => {
+  const { email } = req.body;
+  console.log(email);
+  try {
+    const user = await User.findOne({ email });
+    console.log(user)
+    res.redirect(`/reset-password?email=${email}`)
+  } catch (err) {
+    res.render("auth/forgot", {
+      pageTitle: "Forgot Password",
+      isLoggedIn: false,
+      errorMessages: [err.message],
+    });
+  }
 };
 
 exports.getSignup = (req, res, next) => {
