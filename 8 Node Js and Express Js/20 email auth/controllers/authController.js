@@ -3,11 +3,13 @@ const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 
 const sendGrid = require("@sendgrid/mail");
+const { firstNameValidation, lastNameValidation, emailValidation, passwordValidation, termsValidation, confirmPasswordValidation, userTypeValidation } = require("./validations");
+const SEND_GRID_KEY = "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";
 
 sendGrid.setApiKey(SEND_GRID_KEY);
 
 exports.getLogin = (req, res, next) => {
-  res.render("auth/login", { pageTitle: "login", isLoggedIn: false });
+  res.render("auth/login", { pageTitle: "Login", isLoggedIn: false });
 };
 
 exports.getForgotPassword = (req, res, next) => {
@@ -17,13 +19,80 @@ exports.getForgotPassword = (req, res, next) => {
   });
 };
 
+exports.getResetPassword = (req, res, next) => {
+  const { email } = req.query;
+  res.render("auth/reset_password", {
+    pageTitle: "Reset Password",
+    isLoggedIn: false,
+    email: email,
+  });
+};
+
+exports.postResetPassword = [
+  passwordValidation,
+  confirmPasswordValidation,
+
+  async (req, res, next) => {
+    const { password, confirm_password, email, otp } = req.body;
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      return res.status(422).render("auth/signup", {
+        pageTitle: "Reset Password",
+        isLoggedIn: false,
+        email: email,
+        errorMessages: errors.array().map((err) => err.msg),
+      });
+    }
+
+    try {
+      const user = await User.findOne({ email });
+      if (!user) {
+        throw new Error("User not found");
+      } else if (Date.now() > user.otpExpiry) {
+        throw new Error("Otp expired");
+      } else if (user.otp !== otp) {
+        throw new Error("Invalid OTP");
+      }
+
+      const hashedPassword = await bcrypt.hash(password, 12);
+      user.password = hashedPassword;
+      user.otp = null;
+      user.otpExpiry = null;
+      await user.save();
+      res.redirect("/login");
+
+    } catch (err) {
+      res.render("auth/reset_password", {
+        pageTitle: "Reset Password",
+        isLoggedIn: false,
+        email: email,
+        errorMessages: [err.message],
+      });
+    }
+  },
+];
+
 exports.postForgotPassword = async (req, res, next) => {
   const { email } = req.body;
-  console.log(email);
   try {
     const user = await User.findOne({ email });
-    console.log(user)
-    res.redirect(`/reset-password?email=${email}`)
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    user.otp = otp;
+    user.otpExpiry = Date.now() + 40 * 60 * 1000; // OTP valid for 5 minutes
+    await user.save();
+
+    const forgotEmail = {
+      to: email,
+      from: "amankumar297989@gmail.com",
+      subject: "Here is your OTP to reset password",
+      html: `<h1>Opt is: ${otp}</h1>
+        <p>Enter this otp on <a href="http://localhost:3000/reset-password?email=${email}">Reset Password</a> page</p>`,
+    };
+
+    await sendGrid.send(forgotEmail);
+
+    res.redirect(`/reset-password?email=${email}`);
   } catch (err) {
     res.render("auth/forgot", {
       pageTitle: "Forgot Password",
@@ -34,7 +103,7 @@ exports.postForgotPassword = async (req, res, next) => {
 };
 
 exports.getSignup = (req, res, next) => {
-  res.render("auth/signup", { pageTitle: "login", isLoggedIn: false });
+  res.render("auth/signup", { pageTitle: "Sign", isLoggedIn: false });
 };
 
 exports.postLogin = async (req, res, next) => {
@@ -64,62 +133,13 @@ exports.postLogin = async (req, res, next) => {
 };
 
 exports.postSignup = [
-  // First Name Validator.
-  check("firstName")
-    .notEmpty()
-    .withMessage("First name is mandatory")
-    .trim()
-    .isLength({ min: 4 })
-    .withMessage("First name should be minimum 4 chars")
-    .matches(/^[a-zA-Z\s]+$/)
-    .withMessage("First name should only contain English letters"),
-
-  // Last Name Validator.
-  check("lastName")
-    .trim()
-    .matches(/^[a-zA-Z\s]*$/)
-    .withMessage("Last name should only contain English letters"),
-
-  // Email Validator.
-  check("email")
-    .isEmail()
-    .withMessage("Please enter a valid email")
-    .normalizeEmail(),
-
-  // Password Validator.
-  check("password")
-    .trim()
-    .isLength({ min: 8 })
-    .withMessage("Password should be minimum 8 chars")
-    .matches(/[a-z]/)
-    .withMessage("Password should have at least one small alphabet")
-    .matches(/[A-Z]/)
-    .withMessage("Password should have at least one capital alphabet")
-    .matches(/[!@#$%^&*()\-_=+\[\]{};:'",.<>\/?\\|]/)
-    .withMessage("Password must contain at least one special character"),
-
-  // Confirm Password Validator.
-  check("confirm_password")
-    .trim()
-    .custom((value, { req }) => {
-      if (value !== req.body.password) {
-        throw new Error("Confirm Password does not match Password");
-      }
-      return true;
-    }),
-
-  // UserType Validator.
-  check("userType")
-    .trim()
-    .notEmpty()
-    .withMessage("User type must be required")
-    .isIn(["guest", "host"])
-    .withMessage("User type is invalid"),
-
-  // Terms Accepted Validator.
-  check("termsAccepted")
-    .notEmpty()
-    .withMessage("Terms and conditions must be accepted"),
+  firstNameValidation,
+  lastNameValidation,
+  emailValidation,
+  passwordValidation,
+  confirmPasswordValidation,  
+  userTypeValidation,  
+  termsValidation,
 
   async (req, res, next) => {
     console.log("user came to signup ", req.body);
