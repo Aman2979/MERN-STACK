@@ -59,6 +59,7 @@ exports.postDeleteHome = (req, res, next) =>{
       console.log("Error on deleting time", error)
     }
     res.redirect("/host/host-homes")
+    
   })
 }
 
