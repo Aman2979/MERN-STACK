@@ -1,5 +1,7 @@
+const path = require("path");
 const Home = require("../models/Home");
 const User = require("../models/User");
+const rootDir = require("../util/path-util");
 
 exports.getIndex = (req, res, next) => {
   console.log(req.session);
@@ -83,3 +85,11 @@ exports.getHomeDetails = (req, res, next) => {
     });
   });
 };
+
+exports.getRules = (req, res, next) => {
+  // const homeId = req.params.homeId;
+  const rulesFileName = 'Airbnb_House_Rules.pdf';
+  const filePath = path.join(rootDir, "rules", rulesFileName);
+  // res.sendFile(filePath);
+  res.download(filePath, "Rules.pdf")
+}
