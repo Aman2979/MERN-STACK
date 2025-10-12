@@ -24,9 +24,9 @@ app.use(errorController.get404);
 
 const mongoose = require("mongoose");
 
-const PORT = 3001;
+const PORT = 3000;
 const MONGO_DB_URL =
-  "mongodb+srv://aman0001:aman2979@aman0001.uy36hts.mongodb.net/airbnb?retryWrites=true&w=majority&appName=aman0001";
+  "mongodb+srv://aman0001:aman2979@aman0001.w1coczr.mongodb.net/?retryWrites=true&w=majority&appName=aman0001";
 
 mongoose.connect(MONGO_DB_URL).then(() => {
   app.listen(PORT, () => {
