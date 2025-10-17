@@ -24,13 +24,29 @@ const LoadItems = () => {
   return (
     <>
       {isLoading && (
-        <div className="text-center">
-          <div className="spinner-border" role="status">
-            <span className="visually-hidden">Loading...</span>
-          </div>
+        <div className="flex flex-col items-center justify-center py-10">
+          <div className="w-12 h-12 border-4 border-blue-400 border-t-transparent rounded-full animate-spin mb-4"></div>
+          <span className="text-blue-500 font-medium text-lg">Loading your todos...</span>
         </div>
       )}
-      {!isLoading && todoItems.length === 0 && <p>Enjoy your day</p>}
+      {!isLoading && todoItems.length === 0 && (
+        <div className="flex flex-col items-center justify-center py-16">
+          <svg
+            className="w-16 h-16 text-blue-300 mb-4"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth={1.5}
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M12 7v6l4 2m6-5a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
+          </svg>
+          <p className="text-gray-500 text-lg font-semibold">Enjoy your day! You have no pending todos.</p>
+        </div>
+      )}
     </>
   );
 };

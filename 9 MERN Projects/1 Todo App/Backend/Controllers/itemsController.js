@@ -27,4 +27,14 @@ exports.deleteTodoItem = async (req, res, next) => {
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
-}                                                          
+} 
+
+exports.updateTodoItem = async (req, res, next) => {
+  try {
+    const id = req.params.id;
+    const updatedItem = await TodoItem.findByIdAndUpdate(id, req.body, { new: true });
+    res.json(updatedItem);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+}

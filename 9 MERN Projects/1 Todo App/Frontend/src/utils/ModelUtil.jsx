@@ -3,6 +3,6 @@ export const todoItemToClientModel = (serverItem) => {
     id: serverItem._id,
     todoText: serverItem.task,
     todoDate: serverItem.date,
-    completd: serverItem.completed
+    completed: serverItem.completed
   }
 }
